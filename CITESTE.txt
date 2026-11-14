@@ -1,0 +1,97 @@
+DXF2PNG 1.5 - conversie DXF -> PNG de rezolutie mare (implicit 24000 px)
+             si planse PDF la scara (implicit 1:1000, A0)
+=========================================================================
+
+PORNIRE
+  Dublu-clic pe DXF2PNG.exe. Se deschide o fereastra neagra (consola) si,
+  in browserul implicit, interfata aplicatiei. Lasati consola deschisa cat
+  lucrati; inchiderea ei opreste aplicatia.
+  Puteti si trage un fisier .dxf peste DXF2PNG.exe - porneste direct cu el.
+
+  La prima pornire, Windows SmartScreen poate afisa "Windows a protejat PC-ul"
+  (aplicatia nu este semnata digital): apasati "Mai multe informatii" ->
+  "Executare oricum".
+
+INTERFATA
+  Sus: "Deschide DXF...", campul pentru cale si numele fisierului incarcat.
+  Stanga: tabelul STRATURILOR, pe toata inaltimea (bara de deasupra lui
+  aplica o valoare la toate straturile deodata).
+  Dreapta: previzualizarea, iar dedesubt taburile "Imagine PNG",
+  "Plansa PDF" si "Setari generale".
+
+PASI
+  1. "Deschide DXF..." si alegeti fisierul (sau trageti-l oriunde in fereastra).
+  2. In tabelul STRATURI reglati pentru fiecare strat:
+       - Vizibil      : bifat = apare in imagine
+       - Culoare      : culoarea liniilor si textelor din strat
+       - Grosime (px) : grosimea liniilor in imaginea finala, in pixeli
+       - Scara text   : 1 = inaltimea din DXF, 2 = de doua ori mai mare etc.
+       - Tip linie    : bifat = respecta liniile intrerupte / ax din DXF
+       - sagetile muta stratul in ordinea de desenare (primul e dedesubt)
+  3. In IMAGINE: latura lunga (24000 px implicit), margine, fundal alb sau
+     transparent, factori globali pentru grosimi si texte.
+  4. Previzualizare: "Intregul plan" arata tot desenul; un clic pe plan arata
+     zona respectiva la rezolutia finala (1:1), cu grosimile si textele reale.
+  5. "Genereaza PNG". Fisierul se salveaza implicit langa DXF, cu numele
+     <nume>_24000px.png. Butonul "Arata in folder" il deschide in Explorer.
+
+PLANSE PDF LA SCARA (sectiunea "Planse PDF la scara")
+  - Scara (implicit 1:1000), format A0..A4, orientare, suprapunere intre
+    planse (m teren). La A0 vedere, 1:1000, o plansa acopera 1159 x 821 m.
+  - Bifati "plansa PDF" langa Previzualizare ca sa vedeti impartirea si
+    numerotarea planselor direct pe plan.
+  - Plansele goale sunt omise; grila este pozitionata automat astfel incat
+    sa rezulte cat mai putine planse.
+  - Fiecare plansa are: chenar, retea de coordonate (cruci la 100 m) cu
+    etichete X (Nord) / Y (Est) pe chenar, sageata nord si cartus cu titlu,
+    numar plansa, scara, format, data, sistem de coordonate si schema de
+    RACORDARE cu numerele planselor vecine.
+  - Prima pagina este PLANUL DE RACORDARE A PLANSELOR: tot planul, la o scara
+    convenabila (ex. 1:15000), cu toate plansele numerotate.
+  - Grosimi: butonul "Grosimi PDF recomandate" propune grosimi dupa numele
+    straturilor (limita UAT 1 mm, intravilan 0,7 mm, constructii / drumuri /
+    ape 0,35 mm, imobile 0,25 mm). Pe ecran, cu plansa A0 afisata intreaga,
+    liniile par mai subtiri decat la tiparire - verificati cu zoom 100%.
+  - In tabelul straturilor, coloanele PDF: "Grosime mm" = grosimea liniilor pe
+    hartie, "Text x" = factor pentru textele din strat (1 = inaltimea din DXF
+    la scara plansei: un text de 1 m apare de 1 mm la 1:1000).
+  - PDF-ul este vectorial (se tipareste clar la orice marime); textele sunt
+    desenate ca si contururi, deci nu depind de fonturile calculatorului
+    pe care se deschide.
+  - Implicit un singur PDF cu toate paginile; optional cate un fisier pe plansa
+    (<nume>_plansa_01.pdf ..., <nume>_racordare.pdf).
+
+GEOREFERENTIERE
+  Cu optiunea ".pgw" bifata se scrie si un world file (ex. plan_24000px.pgw).
+  ArcGIS / QGIS pozitioneaza imaginea direct in coordonatele DXF-ului
+  (ex. Stereo 70). Sistemul de coordonate trebuie setat manual in GIS.
+
+ZONA DESENATA
+  "automata" ignora punctele aberante (de ex. un vertex gresit, departe de
+  plan). "toate entitatile" include tot. "manuala" = coordonate introduse.
+
+FISIER DESCHIS IN ALT PROGRAM
+  Daca PDF-ul / PNG-ul de iesire este deschis (Adobe, IrfanView...), Windows
+  nu permite inlocuirea lui. Aplicatia salveaza atunci automat cu un nume nou,
+  ex. "plan_planse_A0_1-1000 (2).pdf", si afiseaza un avertisment.
+
+SETARI SALVATE
+  Setarile (pe nume de strat) se salveaza in dxf2png_setari.json, langa
+  executabil, si se reaplica automat la urmatorul DXF cu aceleasi straturi.
+
+LINIE DE COMANDA (fara interfata, cu setarile salvate)
+  DXF2PNG.exe -cli plan.dxf -px 24000 -out C:\Iesire\plan.png
+  DXF2PNG.exe -cli -pdf plan.dxf -out C:\Iesire\planse.pdf
+
+CE SE DESENEAZA
+  LINE, LWPOLYLINE, POLYLINE (2D/3D, cu arce), CIRCLE, ARC, ELLIPSE, SPLINE,
+  SOLID, HATCH plin, TEXT, MTEXT, ATTRIB, blocuri (INSERT, inclusiv imbricate).
+  Nu se deseneaza: puncte (POINT), cote (DIMENSION), HATCH cu model, imagini.
+  Textele folosesc fonturile Windows indicate in stilurile DXF (arial, verdana
+  etc.); fonturile SHX se inlocuiesc cu Arial.
+
+PERFORMANTA
+  Imaginea se randeaza pe benzi: 24000 x 20000 px necesita ~300 MB RAM si
+  ~30-60 s. Fisierele PNG foarte mari (peste 400 megapixeli) nu se deschid in
+  toate programele de vizualizare - folositi de ex. QGIS, ArcGIS, IrfanView
+  sau GIMP.
