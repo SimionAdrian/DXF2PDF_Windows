@@ -1,26 +1,45 @@
-DXF2PNG 1.5 - conversie DXF -> PNG de rezolutie mare (implicit 24000 px)
+DXF2PNG 1.7 - conversie DWG / DXF -> PNG de rezolutie mare (implicit 24000 px)
              si planse PDF la scara (implicit 1:1000, A0)
 =========================================================================
+
+
+NOU IN 1.7
+  - HARTA: butonul "Harta ⤢" (langa "Intregul plan") deschide planul pe tot
+    ecranul. Rotita mouse-ului / doua degete pe touchpad = marire si
+    micsorare, tragere = mutare, dublu-clic = marire, butoanele + − ⤢,
+    ✕ sau Esc = inchidere.
+    Butonul ▦ arata plansele PDF numerotate; clic pe o plansa o deschide
+    (marita pe ecran), "« Plan de racordare" revine la toate plansele.
+  - PDF (un singur fisier cu toate plansele):
+      * in Planul de racordare, clic pe o plansa = deschide plansa;
+      * pe fiecare plansa, butonul "« PLAN DE RACORDARE A PLANSELOR" (stanga
+        sus) revine la pagina 1, iar casutele din schema de RACORDARE din
+        cartus duc la plansele vecine;
+      * semne de carte (Bookmarks) cu fiecare plansa, afisate automat.
+  - Dupa generare: "Deschide PDF" / "Deschide" (PNG) deschid fisierul cu
+    programul implicit din Windows (Adobe etc.); "Vezi in Harta" /
+    "Planse in Harta" arata acelasi desen in Harta, cu marire.
 
 PORNIRE
   Dublu-clic pe DXF2PNG.exe. Se deschide o fereastra neagra (consola) si,
   in browserul implicit, interfata aplicatiei. Lasati consola deschisa cat
   lucrati; inchiderea ei opreste aplicatia.
-  Puteti si trage un fisier .dxf peste DXF2PNG.exe - porneste direct cu el.
+  Puteti si trage un fisier .dwg sau .dxf peste DXF2PNG.exe - porneste direct cu el.
 
   La prima pornire, Windows SmartScreen poate afisa "Windows a protejat PC-ul"
   (aplicatia nu este semnata digital): apasati "Mai multe informatii" ->
   "Executare oricum".
 
 INTERFATA
-  Sus: "Deschide DXF...", campul pentru cale si numele fisierului incarcat.
+  Sus: "Deschide DWG / DXF...", campul pentru cale si numele fisierului incarcat.
   Stanga: tabelul STRATURILOR, pe toata inaltimea (bara de deasupra lui
   aplica o valoare la toate straturile deodata).
   Dreapta: previzualizarea, iar dedesubt taburile "Imagine PNG",
   "Plansa PDF" si "Setari generale".
 
 PASI
-  1. "Deschide DXF..." si alegeti fisierul (sau trageti-l oriunde in fereastra).
+  1. "Deschide DWG / DXF..." si alegeti fisierul .dwg sau .dxf (sau trageti-l
+     oriunde in fereastra).
   2. In tabelul STRATURI reglati pentru fiecare strat:
        - Vizibil      : bifat = apare in imagine
        - Culoare      : culoarea liniilor si textelor din strat
@@ -34,6 +53,18 @@ PASI
      zona respectiva la rezolutia finala (1:1), cu grosimile si textele reale.
   5. "Genereaza PNG". Fisierul se salveaza implicit langa DXF, cu numele
      <nume>_24000px.png. Butonul "Arata in folder" il deschide in Explorer.
+
+FISIERE DWG (nou in versiunea 1.6)
+  - Se pot deschide direct fisiere DWG, versiunile R14 (AC1014) pana la
+    AutoCAD 2018+ (AC1032), fara AutoCAD si fara alte programe instalate.
+  - Citirea se face cu LibreDWG, inclus in aplicatie, in fereastra
+    browserului. La un DWG mare citirea dureaza cateva secunde; mesajul de
+    langa "Deschide" arata progresul.
+  - Dupa citire, totul functioneaza ca la DXF: straturi, culori, grosimi,
+    PNG, planse PDF. Imaginile se salveaza implicit langa fisierul DWG.
+  - Daca un DWG nu se poate citi (fisier deteriorat sau versiune foarte
+    veche, sub R14), salvati-l din AutoCAD ca DXF si deschideti DXF-ul.
+  - Modul -cli (linie de comanda) accepta doar DXF.
 
 PLANSE PDF LA SCARA (sectiunea "Planse PDF la scara")
   - Scara (implicit 1:1000), format A0..A4, orientare, suprapunere intre
@@ -87,6 +118,7 @@ CE SE DESENEAZA
   LINE, LWPOLYLINE, POLYLINE (2D/3D, cu arce), CIRCLE, ARC, ELLIPSE, SPLINE,
   SOLID, HATCH plin, TEXT, MTEXT, ATTRIB, blocuri (INSERT, inclusiv imbricate).
   Nu se deseneaza: puncte (POINT), cote (DIMENSION), HATCH cu model, imagini.
+  La fisierele DWG, cotele (DIMENSION) se deseneaza.
   Textele folosesc fonturile Windows indicate in stilurile DXF (arial, verdana
   etc.); fonturile SHX se inlocuiesc cu Arial.
 
@@ -95,3 +127,9 @@ PERFORMANTA
   ~30-60 s. Fisierele PNG foarte mari (peste 400 megapixeli) nu se deschid in
   toate programele de vizualizare - folositi de ex. QGIS, ArcGIS, IrfanView
   sau GIMP.
+
+LICENTE
+  Citirea DWG foloseste LibreDWG (GNU GPL v3), prin pachetul libredwg-web
+  (https://github.com/mlightcad/libredwg-web; LibreDWG:
+  https://www.gnu.org/software/libredwg/). Codul sursa complet al aplicatiei
+  este in folderul "sursa".
